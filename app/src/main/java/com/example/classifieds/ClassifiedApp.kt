@@ -16,11 +16,42 @@ class ClassifiedApp() : Application() {
     }
 
     fun retrofit(): Api {
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+        Timber.plant(new Timber.DebugTree());
+
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(message -> Timber.i(message));
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+
+
         var retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val api: Api = retrofit.create(Api::class.java)
         return api
+    }
+
+     override fun intercept(chain: Interceptor.Chain): Response {
+        var request = chain.request()
+        request = request?.newBuilder()
+                ?.addHeader("Content-Type", "application/json")
+                ?.addHeader("Accept", "application/json")
+                ?.build()
+        return chain.proceed(request)
+    }
+
+        @Throws(IOException::class)
+    override fun authenticate (route: Route?, response: Response?): Request? {
+        var requestAvailable: Request? = null
+        try {
+            requestAvailable = response?.request()?.newBuilder()
+                    ?.addHeader("AUTH_TOKEN", "UUID.randomUUID().toString()")
+                    ?.build()
+            return requestAvailable
+        } catch (ex: Exception) { }
+        return requestAvailable
     }
 }

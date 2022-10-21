@@ -35,7 +35,7 @@ public class DetailsActivity extends AppCompatActivity {
         binding.createdAt.setText("Created At : " + Utils.Companion.convertToDate(classifiedItem.getCreated_at()));
         Uri uri = Uri.parse(classifiedItem.getImage_urls().get(0));
         binding.image.setImageURI(uri);
-
+        Log.d("test","uri_value"+ String.valueof(uri));
     }
 
     private void manageIntent() {
