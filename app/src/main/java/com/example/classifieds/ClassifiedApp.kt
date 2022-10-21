@@ -16,6 +16,16 @@ class ClassifiedApp() : Application() {
     }
 
     fun retrofit(): Api {
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        Gson gson = gsonBuilder.create();
+        Timber.plant(new Timber.DebugTree());
+
+        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor(message -> Timber.i(message));
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+
+
         var retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
