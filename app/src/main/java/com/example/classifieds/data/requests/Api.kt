@@ -8,4 +8,7 @@ interface Api {
 
     @GET("dynamodb-writer")
     fun getList(): Call<ApiResponse>
+
+    @GET("yourwebsite/{someParam}/login")
+
 }
